@@ -1,0 +1,51 @@
+﻿[
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "templateId",
+        "type": "uint16"
+      }
+    ],
+    "name": "getTemplate",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "coinSet",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "coinType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "coinGrade",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "coinMintCount",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "coinCount",
+        "type": "uint8"
+      },
+      {
+        "internalType": "string",
+        "name": "coinUrl",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "coinName",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
