@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react';
 import { providers } from "ethers";
 import Web3Modal from 'web3modal'
 import { getOwnedEmojis } from "../lib/erc20";
-import { getOwnedTokens } from "../lib/erc721";
 import Toast from 'react-bootstrap/Toast';
 
 function ConnectWallet({ onAccountConnect }) {
     const [web3Modal, setWeb3Modal] = useState(null);
     const [address, setAddress] = useState("");
     const [emojis, setEmojis] = useState(0);
-    //const [emojiTokens, setEmojiTokens] = useState(null);
     const [show, setShow] = useState(false);
 
     useEffect(() => {
@@ -75,7 +73,6 @@ function ConnectWallet({ onAccountConnect }) {
                   <button className="btn btn-outline-danger mx-2" type="button" onClick={disconnectWallet}>Disconnect {address.slice(-6).toUpperCase()}</button> 
                   <button className="btn btn-outline-secondary mx-2" type="button" onClick={() => showBalances()}>Show Balance</button>
               </>
-              
           ): (
               <button type="button" className="btn btn-outline-success" onClick={connectWallet}>Connect Wallet</button>
           )}

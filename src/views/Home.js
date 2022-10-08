@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Stepper from "react-stepper-horizontal/lib/Stepper";
@@ -12,8 +13,14 @@ import "../assets/css/Home.css";
 
 function Home( { accountConnected} ) {
   const { id } = useParams();
+  const [ mintEnabled, setMintEnabled ] = useState(null);
+  const [ showMessage, setShowMessage ] = useState(false);
+  const [ headerMessage, setHeaderMessage ] = useState(null);
+  const [ mintLimitStart, setMintLimitStart ] = useState(null);
+  const [ mintLimitEnd, setMintLimitEnd ] = useState(null);
+  const [ showErrorMessage, setShowErrorMessage ] = useState(false);
+  const [ headerErrorMessage, setHeaderErrorMessage ] = useState(null);
   const [ templateId, setTemplateId ] = useState(0);
-  const [ inputErrors, setInputErrors ] = useState("");
   const [ templateDetail, setTemplateDetail] = useState(null);
   const [ coinType, setCoinType ] = useState("");
   const [ coinGrade, setCoinGrade ] = useState("");
@@ -27,14 +34,63 @@ function Home( { accountConnected} ) {
   const [ mintCoinActionBtnDisabled, setMintCoinActionBtnDisabled] = useState(false);
 
   useEffect(() => {
+
+    if (mintEnabled === null)
+    {
+      if (!fetchVariables()) return;
+    }
+    else if (!mintEnabled) return;
+
     if (id != null) {
       setTemplateId(id);
       loadTemplate(id);
     }
+
   }, [accountConnected])
 
+  function fetchVariables() {
+    const varURL ="https://mlasss.github.io/ecoin-var/mint.json"; 
+
+    fetch(varURL, {
+      method: "get",
+      headers: {
+        "Accept": "application/json",
+      },
+    })
+    .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Failed to load mint variables.");
+        }
+    })
+    .then(data => { 
+        if (data.mintEnabled != null) setMintEnabled(data.mintEnabled);
+        else throw new Error("Corrupted mint variables [mintEnabled missing].");
+        if (data.mintLimitStart != null) setMintLimitStart(data.mintLimitStart);
+        else throw new Error("Corrupted mint variables [mintLimitStart missing].");
+        if (data.mintLimitEnd != null) setMintLimitEnd(data.mintLimitEnd);
+        else throw new Error("Corrupted mint variables [mintLimitEnd missing].");
+        if (data.headerMessage != null) setHeaderMessage(data.headerMessage);
+        else throw new Error("Corrupted mint variables [headerMessage missing].");
+        setShowMessage(true);
+    })
+    .catch(errorMsg => {
+        setHeaderErrorMessage(errorMsg.message);
+        setShowErrorMessage(true);
+        setMintEnabled(false);
+        setHeaderMessage("Coin minting can not be executed.");
+        setShowMessage(true);
+        console.error(errorMsg);
+        return false;
+    });    
+    return true;
+  }
+
   function loadTemplate(templateId){
-    setInputErrors("");
+    if (!isValidTemplateId(templateId)) return;
+
+    setShowErrorMessage(false);
     setEmojiCount(0);
     getTemplate(templateId).then(data => {
       if (data != null) {
@@ -54,13 +110,23 @@ function Home( { accountConnected} ) {
           setEmojiCount(0);
         });
 
-        if (data?.coinMintCount > 0) setInputErrors("This Coin is already minted.");
+        if (data?.coinMintCount > 0) {
+          setHeaderErrorMessage(`The Coin Template ${templateId} is already minted.`);
+          setShowErrorMessage(true);
+        }
       }
     }).catch(error => {
-      //console.log(error);
       setTemplateDetail(null);
-      setInputErrors("Failed to load Template.");
+      setHeaderErrorMessage(`Failed to load Coin Template ${templateId}.`);
+      setShowErrorMessage(true);
     });
+  }
+
+  function isValidTemplateId(templateId){
+    if (templateId >= mintLimitStart && templateId < mintLimitEnd) return true;
+    setHeaderErrorMessage(`Please provide correct Coin Template Id.`);
+    setShowErrorMessage(true);
+    return false;
   }
 
   function loadTemplateClick()
@@ -71,6 +137,7 @@ function Home( { accountConnected} ) {
   // Mint Coin Modal -----------------------------------------------------------------
 
   function mintCoinModalShow(){
+    if (!mintEnabled) return;
     setMintCoinStep(0);
     setMintCoinApproveBtnText("Approve Emoji Burn");
     setMintCoinActionBtnText("Mint");
@@ -105,7 +172,8 @@ function Home( { accountConnected} ) {
     setMintCoinActionBtnText("Minting...");
     mintCoin(templateId).then(val => {
       if (val === "1"){
-        alert("The Coin was minted successfully and shortly will arrive to your wallet! Please click 'Refresh Metadata' on Opensea gallery to see changes on Opensea.");
+        setHeaderMessage("The Coin was minted successfully and shortly will arrive in your wallet!");
+        setShowMessage(true);
         setMintCoinModalVisibiltiy(false);
       } else {
         setModalErrors(extractMessage(val?.message));
@@ -142,7 +210,19 @@ function Home( { accountConnected} ) {
           <div className="card galery-container">
             <div className="card-body">
               <div className="row">
-                <span><b>{'Enter Emoji Template Id'}</b></span>
+                <div>
+                  <Alert variant="secondary" show={showMessage} onClose={() => setShowMessage(false)} dismissible>
+                    <p className="mb-0">
+                        {headerMessage}
+                    </p>
+                  </Alert>  
+                  <Alert variant="danger" show={showErrorMessage} onClose={() => setShowErrorMessage(false)} dismissible>
+                    <p className="mb-0">
+                        {headerErrorMessage}
+                    </p>
+                  </Alert>
+                </div>
+                <span><b>{'Enter Coin Template Id'}</b></span>
                 <div className="col-md-4">
                   <input maxLength={5} className="form-control" value={templateId != null ? templateId : 0 } onChange={event => setTemplateId(event.target.value.replace(/\D/,''))} />
                 </div>
@@ -158,13 +238,9 @@ function Home( { accountConnected} ) {
                       </button>) 
                     : <></>
                   }
-
                 </div>
               </div>
-              <span className="text-danger">{ inputErrors } </span>
               <br/>
-
-
               <div className="row">
                 <div className="col-md-12 px-1">
                   <div className="row">
@@ -215,7 +291,7 @@ function Home( { accountConnected} ) {
                         <div className="col-md-12">
                           <div className="btn-group" role="group">
                             {
-                            emojiCount > 0 && accountConnected != null ? (
+                              mintEnabled && emojiCount > 0 && accountConnected != null ? (
                               <button type="button" className="btn btn-secondary action-btn px-4 mx-2" onClick={mintCoinModalShow}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus-square" viewBox="0 0 19 19">
                                   <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
