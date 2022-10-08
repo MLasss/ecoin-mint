@@ -1,26 +1,26 @@
 {
   "files": {
     "main.css": "/ecoin-mint/static/css/main.65ac121a.chunk.css",
-    "main.js": "/ecoin-mint/static/js/main.b2d6a8b4.chunk.js",
-    "main.js.map": "/ecoin-mint/static/js/main.b2d6a8b4.chunk.js.map",
-    "runtime-main.js": "/ecoin-mint/static/js/runtime-main.9d1633f5.js",
-    "runtime-main.js.map": "/ecoin-mint/static/js/runtime-main.9d1633f5.js.map",
+    "main.js": "/ecoin-mint/static/js/main.ab5539ee.chunk.js",
+    "main.js.map": "/ecoin-mint/static/js/main.ab5539ee.chunk.js.map",
+    "runtime-main.js": "/ecoin-mint/static/js/runtime-main.374d451d.js",
+    "runtime-main.js.map": "/ecoin-mint/static/js/runtime-main.374d451d.js.map",
     "static/css/2.984f751f.chunk.css": "/ecoin-mint/static/css/2.984f751f.chunk.css",
-    "static/js/2.c13bf8bc.chunk.js": "/ecoin-mint/static/js/2.c13bf8bc.chunk.js",
-    "static/js/2.c13bf8bc.chunk.js.map": "/ecoin-mint/static/js/2.c13bf8bc.chunk.js.map",
-    "static/js/3.3daf619a.chunk.js": "/ecoin-mint/static/js/3.3daf619a.chunk.js",
-    "static/js/3.3daf619a.chunk.js.map": "/ecoin-mint/static/js/3.3daf619a.chunk.js.map",
+    "static/js/2.b9e143be.chunk.js": "/ecoin-mint/static/js/2.b9e143be.chunk.js",
+    "static/js/2.b9e143be.chunk.js.map": "/ecoin-mint/static/js/2.b9e143be.chunk.js.map",
+    "static/js/3.30045fab.chunk.js": "/ecoin-mint/static/js/3.30045fab.chunk.js",
+    "static/js/3.30045fab.chunk.js.map": "/ecoin-mint/static/js/3.30045fab.chunk.js.map",
     "index.html": "/ecoin-mint/index.html",
     "static/css/2.984f751f.chunk.css.map": "/ecoin-mint/static/css/2.984f751f.chunk.css.map",
     "static/css/main.65ac121a.chunk.css.map": "/ecoin-mint/static/css/main.65ac121a.chunk.css.map",
-    "static/js/2.c13bf8bc.chunk.js.LICENSE.txt": "/ecoin-mint/static/js/2.c13bf8bc.chunk.js.LICENSE.txt",
+    "static/js/2.b9e143be.chunk.js.LICENSE.txt": "/ecoin-mint/static/js/2.b9e143be.chunk.js.LICENSE.txt",
     "static/media/base.css": "/ecoin-mint/static/media/bg.d7aa0881.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.9d1633f5.js",
+    "static/js/runtime-main.374d451d.js",
     "static/css/2.984f751f.chunk.css",
-    "static/js/2.c13bf8bc.chunk.js",
+    "static/js/2.b9e143be.chunk.js",
     "static/css/main.65ac121a.chunk.css",
-    "static/js/main.b2d6a8b4.chunk.js"
+    "static/js/main.ab5539ee.chunk.js"
   ]
 }
